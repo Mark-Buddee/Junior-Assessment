@@ -107,3 +107,8 @@ dotnet test
 | `XmlException` | Bad XML input |
 | `JsonException` | Bad JSON input |
 | `ArgumentNullException` | Null operation passed to `Maths` |
+
+## Limitations
+Order of operations (BODMAS) is not automatically enforced. Instead, the correct evaluation order must be expressed explicitly through the nesting structure of the XML/JSON input.
+
+Supporting BODMAS automatically would require an additional function (Shunting Yard Algorithm) to reorder the operation tree before evaluation.
