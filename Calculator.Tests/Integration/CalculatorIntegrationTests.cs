@@ -100,6 +100,29 @@ public class CalculatorIntegrationTests
         Assert.Equal(8, result);
     }
 
+    // Without correct nesting, 2 + 3 * 4 is evaluated left to right as (2 + 3) * 4 = 20, not 14
+    [Fact]
+    public void xml_order_of_operations()
+    {
+        string xml = "<?xml version=\"1.0\"?><Maths><Operation ID=\"Multiplication\"><Operation ID=\"Plus\"><Value>2</Value><Value>3</Value></Operation><Value>4</Value></Operation></Maths>";
+        IInputParser parser = new XmlParser();
+        Operation expression = parser.Parse(xml);
+        Maths maths = new Maths();
+        double result = maths.Evaluate(expression);
+        Assert.Equal(14, result);
+    }
+
+    [Fact]
+    public void json_order_of_operations()
+    {
+        string json = "{\"Maths\":{\"Operation\":{\"@ID\":\"Multiplication\",\"Value\":[\"4\"],\"Operation\":{\"@ID\":\"Plus\",\"Value\":[\"2\",\"3\"]}}}}";
+        IInputParser parser = new JsonParser();
+        Operation expression = parser.Parse(json);
+        Maths maths = new Maths();
+        double result = maths.Evaluate(expression);
+        Assert.Equal(14, result);
+    }
+
     // Fractional values
     // 1.5 + 2.5 = 4.0
     [Fact]
